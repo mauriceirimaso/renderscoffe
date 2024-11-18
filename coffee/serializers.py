@@ -3,7 +3,8 @@ from .models import Coffetable
 from .models import Coffeproducts
 from .models import Orders
 from .models import History
-from .models import Notification
+from .models import Notification 
+# notifications
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
