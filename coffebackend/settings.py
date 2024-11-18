@@ -51,7 +51,7 @@ def get_local_ip_for_allowed_hosts():
    
     return local_ip
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost','127.7.0.1', get_local_ip_for_allowed_hosts()]
+ALLOWED_HOSTS = ['*']
 
 # ALLOWED_HOSTS=os.environ.get("ALLOWED_HOSTS").split(" ")
 
