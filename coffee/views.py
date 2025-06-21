@@ -63,8 +63,9 @@ def setglobalemail(email):
     globalemail = email
 
 
-def getglobalemail():
-    return globalemail   
+def getglobalemail(request):
+    return getattr(request, 'user_email', None)
+ 
 
 
 
@@ -121,7 +122,7 @@ def logout(request):
 def isloggedin(request):
     
     try:
-        email = getglobalemail()
+        email = getglobalemail(request)
         if email:
             return Response({'isloggedin': True}, status=status.HTTP_200_OK)
         else:
@@ -240,7 +241,7 @@ def getproductbyid(request):
 
 @api_view(['GET'])
 def getuserdetails(request):
-    email = getglobalemail() 
+    email = getglobalemail(request) 
     print("email being in use is ",email) 
 
     if email:
@@ -327,10 +328,10 @@ from .serializers import OrdersSerializer
 orderid = fetch_and_increment_orderid()
 time = get_formatted_time()
 date = get_formatted_date()
-email = getglobalemail()
+# email = getglobalemail() 
 
 print(f"Order ID: {orderid}")
-print(f"Email: {email}")
+# print(f"Email: {email}")
 
 print(f"Time: {time}")
 print(f"Date: {date}")
@@ -347,7 +348,7 @@ print(f"Date: {date}")
 
 @api_view(['GET'])
 def getallorders(request):
-    email = getglobalemail()
+    email = getglobalemail(request) 
 
     if not email:
         return Response({'error': 'No email stored, please provide one'}, status=status.HTTP_400_BAD_REQUEST)
@@ -375,7 +376,7 @@ def getallorders(request):
 
 @api_view(['GET'])
 def getallhistory(request):
-    email = getglobalemail() 
+    email = getglobalemail(request) 
 
     if not email:
         return Response({'error': 'No email stored, please provide one'}, status=status.HTTP_400_BAD_REQUEST)
@@ -435,13 +436,13 @@ def gethistorybyorderid(request):
 
 @api_view(['GET'])
 def unreadorders(request):
-    email = getglobalemail()
+    email = getglobalemail(request) 
     count = Orders.objects.filter(email=email, isread=False).count()
     return Response({'unreads': count})
 
 @api_view(['GET'])
 def unreadhistory(request):
-    email = getglobalemail()
+    email = getglobalemail(request) 
     count = History.objects.filter(email=email, isread=False).count()
     return Response({'unreads': count})
 
@@ -469,7 +470,7 @@ def recordorder(request):
             
             time = get_formatted_time()
             date = get_formatted_date()
-            email = getglobalemail()
+            email = getglobalemail(request) 
             status_value = "pending"
 
             
@@ -517,7 +518,7 @@ def recordhistory(request):
             
             time = get_formatted_time()
             date = get_formatted_date()
-            email = getglobalemail()
+            email = getglobalemail(request) 
 
             history_status=serializer.validated_data['status']
             orderid=serializer.validated_data['orderid']
@@ -591,7 +592,7 @@ def recordnotification(request):
         balance=request.data.get('balance')
         
        
-        email = getglobalemail()
+        email = getglobalemail(request) 
 
         if not email:
             return Response({'error': 'User is not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -628,7 +629,7 @@ def recordnotification(request):
 
 @api_view(['GET'])
 def countnotification(request):
-    email = getglobalemail()
+    email = getglobalemail(request)  
     if not email:
         return Response({'error': 'Email not found'}, status=400)
 
@@ -639,7 +640,7 @@ def countnotification(request):
 @api_view(['POST'])
 def updatenotification(request):
     try:
-        email = getglobalemail()
+        email = getglobalemail(request) 
         
         Notification.objects.filter(email=email, isread=False).update(isread=True)
         return JsonResponse({"message": "All notifications marked as read"}, status=200)
@@ -650,7 +651,7 @@ def updatenotification(request):
 @api_view(['POST'])
 def updateorders(request):
     try:
-        email = getglobalemail()
+        email = getglobalemail(request) 
         
         Orders.objects.filter(email=email, isread=False).update(isread=True)
         return JsonResponse({"message": "All Orders marked as read"}, status=200)
@@ -662,7 +663,7 @@ def updateorders(request):
 @api_view(['POST'])
 def updatehistory(request):
     try:
-        email = getglobalemail()
+        email = getglobalemail(request) 
         
         History.objects.filter(email=email, isread=False).update(isread=True)
         return JsonResponse({"message": "All History marked as read"}, status=200)
@@ -676,7 +677,7 @@ def updatehistory(request):
 def updatebalance(request):
     try:
        
-        email = getglobalemail()
+        email = getglobalemail(request) 
 
         
         coffee_record = Coffetable.objects.get(email=email)
@@ -722,7 +723,7 @@ def updatebalance(request):
 @api_view(['POST'])
 def addbalance(request):
     try:
-        email = getglobalemail()  
+        email = getglobalemail(request)  
 
        
         coffee_record = Coffetable.objects.get(email=email)
@@ -817,7 +818,7 @@ from django.db.models.functions import Lower, Replace
 @api_view(['POST'])
 def searchhistory(request):
     try:
-        email = getglobalemail()
+        email = getglobalemail(request) 
         productname = request.data.get('productname')
 
         if not productname:
@@ -861,7 +862,7 @@ def searchhistory(request):
 @api_view(['POST'])
 def searchorders(request):
     try:
-        email = getglobalemail()
+        email = getglobalemail(request) 
         productname = request.data.get('productname')
 
         if not productname:
@@ -908,7 +909,7 @@ def searchorders(request):
 
 @api_view(['GET'])
 def fetch_notifications(request):
-    email = getglobalemail()  
+    email = getglobalemail(request) 
     notifications = Notification.objects.filter(email=email).order_by('-id')  
 
     if notifications.exists():
