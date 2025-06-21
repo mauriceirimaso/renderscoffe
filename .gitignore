@@ -1,0 +1,68 @@
+# === Python ===
+__pycache__/
+/maurice_virtual_env/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# === Virtualenv ===
+env/
+venv/
+ENV/
+.venv/
+*.egg-info/
+.eggs/
+
+# === Django ===
+*.log
+*.pot
+*.pyc
+*.sqlite3
+*.db
+local_settings.py
+db.sqlite3
+
+# === Environment Files ===
+.env
+.dotenv
+
+# === Media & Static ===
+/media/
+/staticfiles/
+/static/
+
+# === IDEs & Editors ===
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# === Migrations ===
+/coffebackend/**/migrations/
+/coffee/**/migrations/
+*/migrations/
+/coffee/__pycache__/
+/coffebackend/__pycache__/
+*.pyc
+
+
+# === OS Files ===
+.DS_Store
+Thumbs.db
+
+# === Coverage reports ===
+htmlcov/
+.coverage
+.tox/
+.nox/
+.cache/
+
+# === Pytest ===
+.pytest_cache/
+__pycache__/
+*.pyc
+__pycache__/
+*.pyc
+__pycache__/
+*.pyc
